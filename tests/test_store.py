@@ -19,3 +19,17 @@ def test_complete_hides_from_open_list():
 def test_empty_title_rejected():
     with pytest.raises(ValueError):
         TaskStore().add("   ")
+
+
+def test_remove_returns_task():
+    store = TaskStore()
+    task = store.add("clean up")
+    removed = store.remove(task.id)
+    assert removed == task
+    assert store.list() == []
+
+
+def test_remove_unknown_id_raises_key_error():
+    store = TaskStore()
+    with pytest.raises(KeyError):
+        store.remove(999)

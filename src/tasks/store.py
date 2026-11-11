@@ -27,5 +27,15 @@ class TaskStore:
         task.done = True
         return task
 
+    def rename(self, task_id: int, title: str) -> Task:
+        title = title.strip()
+        if not title:
+            raise ValueError("title must not be empty")
+        if task_id not in self._tasks:
+            raise KeyError(task_id)
+        task = self._tasks[task_id]
+        task.title = title
+        return task
+
     def list(self, include_done: bool = True) -> list[Task]:
         return [t for t in self._tasks.values() if include_done or not t.done]

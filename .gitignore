@@ -1,6 +1,7 @@
 __pycache__/
 .pytest_cache/
 *.egg-info/
+.venv/
 
 # BEGIN AI-DLC:gitignore
 # AI-DLC: local working files

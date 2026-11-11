@@ -27,6 +27,11 @@ class TaskStore:
         task.done = True
         return task
 
+    def reopen(self, task_id: int) -> Task:
+        task = self._tasks[task_id]
+        task.done = False
+        return task
+
     def rename(self, task_id: int, title: str) -> Task:
         title = title.strip()
         if not title:

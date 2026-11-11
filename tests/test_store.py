@@ -56,3 +56,35 @@ def test_rename_preserves_id_and_done():
     renamed = store.rename(task.id, "did something")
     assert renamed.id == original_id
     assert renamed.done is True
+
+
+def test_reopen_marks_done_task_not_done():
+    store = TaskStore()
+    task = store.add("finish")
+    store.complete(task.id)
+    reopened = store.reopen(task.id)
+    assert reopened.done is False
+    assert reopened is task
+
+
+def test_reopen_not_done_task_is_noop():
+    store = TaskStore()
+    task = store.add("pending")
+    reopened = store.reopen(task.id)
+    assert reopened.done is False
+    assert reopened is task
+
+
+def test_reopen_unknown_id_raises():
+    store = TaskStore()
+    with pytest.raises(KeyError):
+        store.reopen(999)
+
+
+def test_reopen_preserves_id_and_title():
+    store = TaskStore()
+    task = store.add("keep me")
+    store.complete(task.id)
+    reopened = store.reopen(task.id)
+    assert reopened.id == task.id
+    assert reopened.title == "keep me"

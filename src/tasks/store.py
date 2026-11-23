@@ -42,5 +42,10 @@ class TaskStore:
         task.title = title
         return task
 
+    def delete(self, task_id: int) -> Task:
+        if task_id not in self._tasks:
+            raise KeyError(task_id)
+        return self._tasks.pop(task_id)
+
     def list(self, include_done: bool = True) -> list[Task]:
         return [t for t in self._tasks.values() if include_done or not t.done]

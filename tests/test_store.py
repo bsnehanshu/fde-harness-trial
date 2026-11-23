@@ -88,3 +88,18 @@ def test_reopen_preserves_id_and_title():
     reopened = store.reopen(task.id)
     assert reopened.id == task.id
     assert reopened.title == "keep me"
+
+
+def test_delete_removes_and_returns_task():
+    store = TaskStore()
+    task = store.add("mistake")
+    keep = store.add("keep")
+    deleted = store.delete(task.id)
+    assert deleted is task
+    assert store.list() == [keep]
+
+
+def test_delete_unknown_id_raises():
+    store = TaskStore()
+    with pytest.raises(KeyError):
+        store.delete(999)

@@ -88,3 +88,32 @@ def test_reopen_preserves_id_and_title():
     reopened = store.reopen(task.id)
     assert reopened.id == task.id
     assert reopened.title == "keep me"
+
+
+def test_clear_done_removes_done_tasks_and_returns_count():
+    store = TaskStore()
+    a = store.add("a")
+    b = store.add("b")
+    store.add("c")
+    store.complete(a.id)
+    store.complete(b.id)
+    assert store.clear_done() == 2
+    assert [t.title for t in store.list()] == ["c"]
+
+
+def test_clear_done_leaves_open_tasks_untouched():
+    store = TaskStore()
+    open_task = store.add("open")
+    done_task = store.add("done")
+    store.complete(done_task.id)
+    store.clear_done()
+    assert store.list() == [open_task]
+    assert open_task.title == "open"
+    assert open_task.done is False
+
+
+def test_clear_done_with_nothing_done_returns_zero():
+    store = TaskStore()
+    store.add("open")
+    assert store.clear_done() == 0
+    assert len(store.list()) == 1

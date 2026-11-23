@@ -42,5 +42,11 @@ class TaskStore:
         task.title = title
         return task
 
+    def clear_done(self) -> int:
+        done_ids = [task_id for task_id, t in self._tasks.items() if t.done]
+        for task_id in done_ids:
+            del self._tasks[task_id]
+        return len(done_ids)
+
     def list(self, include_done: bool = True) -> list[Task]:
         return [t for t in self._tasks.values() if include_done or not t.done]
